@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <form method="post">
+        <input type="text" class="titulo" name="titulo-tarefa" id="titulo-tarefa" placeholder="titulo da tarefa" value="{{ tarefa_selecionada.titulo_tarefa if tarefa_selecionada else '' }}">
+        <input type="date" class="data" name="data-conclusao" id="data-conclusao" value="{{ tarefa_selecionada.data_conclusao if tarefa_selecionada else '' }}">
+        <button type="submit">Salvar</button>
+
+        {% if tarefa_selecionada %}
+            <a href="{{ url_for('agenda') }}" class="btn btn-secondary">Cancelar</a>
+            <a href="{{ url_for('delete', idTarefa=tarefa_selecionada.id_tarefa) }}" class="btn btn-danger">Apagar</a>
+        {% endif %}
+    </form>
+
+    <h2>Lista de tarefas</h2>
+
+    {% if tarefas %}
+    <ul>
+        {% for tarefa in tarefas %}
+        <li class="tarefa-finalizada {% if tarefa.concluida == 1 %}tarefa-concluida{% endif %}">
+            <span>
+                {% if tarefa.concluida == 1 %}
+                    <s>{{ tarefa.titulo_tarefa }}</s> | Concluída em: {{ tarefa.data_conclusao_real }}
+                {% else %}
+                    {{ tarefa.titulo_tarefa }} | {{ tarefa.data_conclusao }}
+                {% endif %}
+            </span>
+
+            <div class="tarefa-actions">
+                <a href="{{ url_for('update', idTarefa=tarefa.id_tarefa) }}" class="btn btn-primary">Editar</a>
+
+                {% if tarefa.concluida == 1 %}
+                    <a href="{{ url_for('toggle', idTarefa=tarefa.id_tarefa) }}" class="btn btn-warning">Reabrir</a>
+                {% else %}
+                    <a href="{{ url_for('toggle', idTarefa=tarefa.id_tarefa) }}" class="btn btn-success">Concluir</a>
+                {% endif %}
+
+                <a href="{{ url_for('delete', idTarefa=tarefa.id_tarefa) }}" class="btn btn-danger" onclick="return confirm('Tem certeza? Tarefas concluídas não podem ser excluídas sem reabrir.')">Apagar</a>
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+        <p>Nenhuma tarefa cadastrada</p>
+    {% endif %}
+{% endblock %}
