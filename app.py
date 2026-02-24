@@ -1,16 +1,15 @@
-
 from flask import Flask, render_template, request, redirect, url_for
 from models.tarefa import Tarefa
 from models.database import Database
 
-app = Flask(__name__)
+app = Flask(__name__) # aplicação flask
 
-@app.route('/')
+@app.route('/') # renderiza pagina inicial 
 def home():
     return render_template('home.html', titulo='Home')
 
-@app.route('/agenda', methods=['GET', 'POST'])
-def agenda():
+@app.route('/agenda', methods=['GET', 'POST']) # get: pedindo dados (mostra lista tarefas)
+def agenda():                                  # post: enviando dados (cria nova tarefa)
     if request.method == 'POST':
         titulo_tarefa = request.form.get('titulo-tarefa')
         data_conclusao = request.form.get('data-conclusao')
@@ -18,7 +17,7 @@ def agenda():
             tarefa = Tarefa(titulo_tarefa=titulo_tarefa, data_conclusao=data_conclusao)
             tarefa.salvar_tarefa()
 
-    tarefas = Tarefa.obter_tarefas()
+    tarefas = Tarefa.obter_tarefas() # busca tarefas e envia para agenda.html
     return render_template('agenda.html', titulo='Agenda', tarefas=tarefas)
 
 @app.route('/delete/<int:idTarefa>')
@@ -27,13 +26,13 @@ def delete(idTarefa):
     tarefa.excluir_tarefa()
     return redirect(url_for('agenda'))
 
-@app.route('/toggle/<int:idTarefa>')
+@app.route('/toggle/<int:idTarefa>') # alterna status: concluida ou aberta
 def toggle(idTarefa):
     tarefa = Tarefa.id(idTarefa)
     tarefa.toggle_concluir()
     return redirect(url_for('agenda'))
 
-@app.route('/update/<int:idTarefa>', methods=['GET', 'POST'])
+@app.route('/update/<int:idTarefa>', methods=['GET', 'POST']) # get: mostra formulario preenchido / post: atualiza tarefa no banco
 def update(idTarefa):
     if request.method == 'POST':
         titulo = request.form.get('titulo-tarefa')
@@ -50,13 +49,7 @@ def update(idTarefa):
                            tarefas=tarefas, 
                            tarefa_selecionada=tarefa_selecionada)
 
-@app.route('/ola')
-def ola_mundo():
-    return "Olá, Mundo!"
-
-# ... imports existentes ...
-
-def init_db():
+def init_db(): # cria tabela, se não existir 
     from models.database import Database
     with Database() as db:
         db.executar("""
@@ -70,7 +63,6 @@ def init_db():
         """)
         print("Banco e tabela 'tarefas' verificados/criados com sucesso!")
 
-# Rode uma vez (pode comentar depois da primeira execução)
 init_db()
 
 if __name__ == '__main__':

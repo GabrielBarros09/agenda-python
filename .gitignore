@@ -1,4 +1,4 @@
-# Ambiente virtual
+# Ambiente virtual (arquivos que não devem ser enviados ao repositório)
 .venv/ 
 
 __pycache__/

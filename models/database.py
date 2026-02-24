@@ -7,34 +7,34 @@ import os
 
 load_dotenv()
 
-DB_PATH = os.getenv('DATABASE', './data/tarefas.sqlite3')
+DB_PATH = os.getenv('DATABASE', './data/tarefas.sqlite3') 
 
-
-class Database:
-    def __init__(self, db_name: str = DB_PATH) -> None:
+# parte que gerencia o banco 
+class Database: 
+    def __init__(self, db_name: str = DB_PATH) -> None: # conexão com o banco
         self.connection: Connection = connect(db_name)
         self.cursor: Cursor = self.connection.cursor()
 
-    def executar(self, query: str, params: tuple = ()) -> Cursor:
+    def executar(self, query: str, params: tuple = ()) -> Cursor: # salva mudanças do banco
         self.cursor.execute(query, params)
         self.connection.commit()
         return self.cursor
     
-    def buscar_um(self, query: str, params: tuple = ()) -> Any:
+    def buscar_um(self, query: str, params: tuple = ()) -> Any: # busca dados do banco
         self.cursor.execute(query, params)
         return self.cursor.fetchone()
     
-    def buscar_tudo(self, query: str, params: tuple = ()) -> list[Any]:
+    def buscar_tudo(self, query: str, params: tuple = ()) -> list[Any]: # executa consulta sql
         self.cursor.execute(query, params)
         return self.cursor.fetchall()
     
-    def close(self) -> None:
+    def close(self) -> None: # fecha conexão com o banco
         self.connection.close()
 
     def __enter__(self) -> Self:
         return self
     
-    def __exit__(self,
+    def __exit__(self, # fecha o banco mesmo em caso de erro, e destaca o erro
                  exc_type: Optional[Type[BaseException]], 
                  exc_value: Optional[BaseException], 
                  tb: Optional[TracebackType]) -> None:

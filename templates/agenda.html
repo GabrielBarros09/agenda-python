@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base.html" %} <!-- estrutura: base.html -->
 
 {% block content %}
     <form method="post">
@@ -6,7 +6,7 @@
         <input type="date" class="data" name="data-conclusao" id="data-conclusao" value="{{ tarefa_selecionada.data_conclusao if tarefa_selecionada else '' }}">
         <button type="submit">Salvar</button>
 
-        {% if tarefa_selecionada %}
+        {% if tarefa_selecionada %} <!-- mostra Cancelar e Apagar quando está editando -->
             <a href="{{ url_for('agenda') }}" class="btn btn-secondary">Cancelar</a>
             <a href="{{ url_for('delete', idTarefa=tarefa_selecionada.id_tarefa) }}" class="btn btn-danger">Apagar</a>
         {% endif %}
@@ -14,7 +14,7 @@
 
     <h2>Lista de tarefas</h2>
 
-    {% if tarefas %}
+    {% if tarefas %} 
     <ul>
         {% for tarefa in tarefas %}
         <li class="tarefa-finalizada {% if tarefa.concluida == 1 %}tarefa-concluida{% endif %}">
@@ -26,7 +26,7 @@
                 {% endif %}
             </span>
 
-            <div class="tarefa-actions">
+            <div class="tarefa-actions"> <!-- botões de ação -->
                 <a href="{{ url_for('update', idTarefa=tarefa.id_tarefa) }}" class="btn btn-primary">Editar</a>
 
                 {% if tarefa.concluida == 1 %}
