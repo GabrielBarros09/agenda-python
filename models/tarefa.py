@@ -3,7 +3,6 @@ from typing import Optional, Self, Any
 from sqlite3 import Cursor
 from datetime import datetime
 
-# atributos da classe (string, int)
 class Tarefa:
     def __init__(self: Self,  
                  titulo_tarefa: Optional[str] = None, 
@@ -18,7 +17,7 @@ class Tarefa:
         self.data_conclusao_real: Optional[str] = data_conclusao_real
 
     @classmethod
-    def id(cls, id_tarefa: int) -> Self: # retorna objeto (tarefa) do banco pelo ID
+    def id(cls, id_tarefa: int) -> Self: 
         with Database() as db:
             query: str = 'SELECT titulo_tarefa, data_conclusao, concluida, data_conclusao_real FROM tarefas WHERE id = ?;'
             params: tuple = (id_tarefa,)
@@ -36,7 +35,7 @@ class Tarefa:
             self.id_tarefa = db.cursor.lastrowid
 
     @classmethod
-    def obter_tarefas(cls) -> list[Self]: # retorna as tarefas do banco
+    def obter_tarefas(cls) -> list[Self]: 
         with Database() as db:
             query: str = 'SELECT id, titulo_tarefa, data_conclusao, concluida, data_conclusao_real FROM tarefas;'
             resultados: list[tuple] = db.buscar_tudo(query)
@@ -44,7 +43,7 @@ class Tarefa:
                                   for id_, titulo, data, concluida, data_real in resultados]
             return tarefas
         
-    def excluir_tarefa(self) -> Cursor: # deleta a tarefa
+    def excluir_tarefa(self) -> Cursor: 
         if self.concluida == 1:
             raise ValueError("Tarefa concluída não pode ser excluída sem reabrir primeiro.")
         with Database() as db:
@@ -53,7 +52,7 @@ class Tarefa:
             resultado: Cursor = db.executar(query, params)
         return resultado
         
-    def toggle_concluir(self) -> Cursor: # marca a tarefa como concluida ou reabre
+    def toggle_concluir(self) -> Cursor: 
         with Database() as db:
             if self.concluida == 1:
                 query = "UPDATE tarefas SET concluida = 0, data_conclusao_real = NULL WHERE id = ?;"
@@ -65,7 +64,7 @@ class Tarefa:
             resultado = db.executar(query, params)
         return resultado
         
-    def atualizar_tarefa(self) -> Cursor: # atualiza titulos, datas e marca como conluida
+    def atualizar_tarefa(self) -> Cursor: 
         with Database() as db:
             query: str = 'UPDATE tarefas SET titulo_tarefa = ?, data_conclusao = ?, concluida = 0 WHERE id = ?;'
             params: tuple = (self.titulo_tarefa, self.data_conclusao, self.id_tarefa)

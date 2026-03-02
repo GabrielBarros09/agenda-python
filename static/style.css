@@ -1,4 +1,4 @@
-:root {/* cores */
+:root {
     --bg-dark: #121212;
     --bg-card: #1E1E1E;
     --primary: #FFD700;
@@ -6,14 +6,14 @@
     --border: #333333;
 }
 
-* { /* reset */
+* { 
     margin: 0;
     padding: 0;
     box-sizing: border-box;
     font-family: 'Inter', sans-serif;
 }
 
-body { /* corpo página */
+body { 
     background: var(--bg-dark);
     color: var(--text-main);
     display: flex;
@@ -32,7 +32,7 @@ body { /* corpo página */
     border: 1px solid var(--border);
 }
 
-h1, h2 { /* titulos */
+h1, h2 { 
     color: var(--primary);
     text-align: center;
     margin-bottom: 20px;
@@ -63,7 +63,7 @@ button[type="submit"] {
     cursor: pointer;
 }
 
-ul { /* lista de itens */
+ul { 
     list-style: none;
 }
 
